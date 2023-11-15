@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">logo</div>
+    <div class="content-wrap">
+        <div class="side-menu">
+            <!--            3. 템플릿에서 게시물 목록 출력-->
+            <ul>
+                <li th:each="post : ${postList}">
+                    <a th:href="@{|/detail/${post.id}|}" th:text="${post.title}" th:class="${post.id == targetPost.id} ? 'check_post' : '' " ></a>
+                </li>
+            </ul>
+            <div>
+                <form action="/write" method="post">
+                    <input type="hidden"  name="id" th:value="${targetBook.id}">
+                    <input type="submit" value="추가">
+                </form>
+            </div>
+        </div>
+        <div class="content">
+            <form method="post">
+                <div>
+                    <input type="hidden" name="id" th:value="${targetPost.id}">
+                </div>
+                <div>
+                    <input type="text" name="title" th:value="${targetPost.title}">
+                </div>
+                <div>
+                    <textarea name="content" cols="30" rows="10" th:text="${targetPost.content}"></textarea>
+                </div>
+                <div>
+                    <input type="button" value="수정" onclick="UpdatePost(this, Update_Post)">
+                    <input type="button" value="삭제" onclick="UpdatePost(this, Delete_Post)">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        Update_Post = {
+            'url' : '/update',
+            'msg' : '수정하시겠습니까?'
+        }
+
+        Delete_Post = {
+            'url' : '/delete',
+            'msg' : '삭제하시겠습니까?'
+        }
+
+        function UpdatePost(input, action){
+            if(confirm(action.msg)){
+                input.form.action = action.url;
+                input.form.submit();
+            }
+        }
+
+
+    </script>
+</div>
+</body>
+</html>
